@@ -1,0 +1,196 @@
+<!-- 模板继承 -->
+{extend name="public:base" /}
+
+<!-- 页面标题 -->
+{block name="title"}Administrator{/block}
+
+<!-- 自定义css -->
+{block name="css"}
+<link rel="stylesheet" href="__STATIC__/layui-formSelects-master/formSelects-v4.css">
+<style>
+    .layui-form-label {
+        width: 110px !important;
+    }
+
+    .lay-ext-mulitsel .layui-input.multiple a {
+        padding: 0px 2px;
+    }
+
+    .xm-select-title{
+        height: unset!important;
+    }
+</style>
+{/block}
+<!-- 内容区域 -->
+{block name="content"}
+<div class="nav-tabs-custom" style="margin-bottom:150px;">
+    <ul class="nav nav-tabs">
+        <li class=""><a href="{:url('admin/team/index')}">{:lang('Team')}</a></li>
+        <li class="active"><a href="{:url('admin/team/create')}">{:lang('Edit')}</a></li>
+        <li class="pull-right"><a href="javascript:history.back(-1);" class="text-muted"><i
+                class="fa fa-chevron-circle-left"></i></a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <form role="form" id="operate" class="layui-form">
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Name')}<span class="lauyi-margin-left text-red">*</span>
+                    </lable>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" autocomplete="off" placeholder="名称" value="{$info.name}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Court')}<span class="lauyi-margin-left text-red">*</span>
+                    </lable>
+                    <div class="layui-input-inline">
+                        <select name="agency_id" lay-search="" lay-filter="demo">
+                            <option value="">请选择或搜索法院</option>
+                            {volist name="court" id ='vo'}
+                            <option value="{$vo.id}" {eq name="info.agency_id" value="$vo['id']" }selected{/eq}>{$vo.name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Manager')}<span class="lauyi-margin-left text-red">*</span>
+                    </lable>
+                    <div class="layui-input-inline">
+                        <select name="manager" lay-search="" lay-filter="demo">
+                            <option value="">请选择区域经理</option>
+                            {volist name="user" id ='vo' }
+                            <option value="{$vo.uid}" {eq name="data.manager" value="$vo['uid']" }selected{/eq}>{$vo.true_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Leader')}<span class="lauyi-margin-left text-red">*</span>
+                    </lable>
+                    <div class="layui-input-inline">
+                        <select name="leader" lay-filter="demo">
+                            <option value="">请选择主管</option>
+                            {volist name="user" id ='vo'}
+                            <option value="{$vo.uid}" {eq name="data.leader" value="$vo['uid']" }selected{/eq}>{$vo.true_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Out job')}</lable>
+                    <div class="layui-input-inline" style="width: 30%">
+                        <div class="layui-form">
+                            <select name="out_job"  xm-select="example10_1" xm-select-search="" xm-select-search-type="dl" xm-select-show-count="3">
+                                <option value="">请选择外勤</option>
+                                {volist name="user" id ='vo' key="key"}
+                                <option value="{$vo.uid}" {in name="$vo.uid" value="$data.out_job"} selected {/in}>{$vo.true_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('In job')}</lable>
+                    <div class="layui-input-inline" style="width: 30%">
+                        <div class="layui-form">
+                            <select name="in_job"  xm-select="example10_11" xm-select-search="" xm-select-search-type="dl" xm-select-show-count="3">
+                                <option value="">请选择内勤</option>
+                                {volist name="user" id ='vo' key="key"}
+                                <option value="{$vo.uid}" {in name="$vo.uid" value="$data.in_job"} selected {/in}>{$vo.true_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="layui-form-item">-->
+                    <!--<lable class="layui-form-label">{:lang('Out job')}<span class="lauyi-margin-left text-red"></span>-->
+                    <!--</lable>-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<select name="out_job[]" class="select2" multiple="multiple" id="out-job" style="width:80%"-->
+                                <!--lay-ignore>-->
+                            <!--<option value="">请选择外勤</option>-->
+                            <!--{volist name="user" id ='vo' }-->
+                            <!--<option value="{$vo.uid}" {php}if(in_array($vo['uid'],$data['out_job']) ) echo 'selected';{/php}>{$vo.username}</option>-->
+                            <!--{/volist}-->
+                        <!--</select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<lable class="layui-form-label">{:lang('In job')}<span class="lauyi-margin-left text-red"></span>-->
+                    <!--</lable>-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<select name="in_job[]" class="select2" multiple="multiple" id="in-job" style="width:80%" lay-ignore>-->
+                            <!--<option value="">请选择内勤</option>-->
+                            <!--{volist name="user" id ='vo'}-->
+                            <!--<option value="{$vo.uid}" {php}if(in_array($vo['uid'],$data['in_job']) ) echo 'selected';{/php}>{$vo.username}</option>-->
+                            <!--{/volist}-->
+                        <!--</select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('Status')}<span
+                            class="lauyi-margin-left text-red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="isvalid" title="{:lang('Valid')}" {eq name="info.isvalid" value="1" }checked{/eq} value="1" checked="">
+                        <input type="radio" name="isvalid" title="{:lang('Disabled')}" {eq name="info.isvalid" value="0" }checked{/eq} value="0">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="operate();">
+                            {:lang('Save')}
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" name="__token__" value="{$token}"/>
+                <input type="hidden" name="id" value="{$info.id}"/>
+            </form>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</div>
+{/block}
+
+<!-- 自定义js -->
+{block name="js"}
+<script type="text/javascript" src="__STATIC__/layui-formSelects-master/formSelects-v4.js"></script>
+<script type="text/javascript">
+    //----------------------------------------------------------------
+    //LAYUI默认配置
+    //----------------------------------------------------------------
+    layui.use(['laytpl', 'form'], function () {
+        var form = layui.form;
+    });
+
+    //----------------------------------------------------------------
+    //保存编辑
+    //----------------------------------------------------------------
+    function operate() {
+        $.ajax({
+            url: "{:url('admin/team/manage')}",
+            data: $("#operate").serialize(),
+            type: 'post',
+            dataType: 'json',
+            success: function (xhr) {
+                if (xhr.code == 200) {
+                    layer.open({
+                        icon: 1,
+                        content: xhr.msg,
+                        skin: 'layer-ext-moon', //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                        yes: function (index, layero) {
+                            window.location.href = "{:url('admin/team/index')}";
+                        }
+                    });
+                } else {
+                    layer.alert('error', {
+                        icon: 2,
+                        content: xhr.msg,
+                        skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                    });
+                }
+            }
+        });
+    }
+</script>
+{/block}

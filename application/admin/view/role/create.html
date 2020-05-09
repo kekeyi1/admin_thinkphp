@@ -1,0 +1,89 @@
+<!-- 模板继承 -->
+{extend name="public:base" /}
+
+<!-- 自定义css -->
+{block name="css"}{/block}
+
+<!-- 内容区域 -->
+{block name="content"}
+<style>
+    .layui-form-label {
+        width: 110px !important;
+    }
+</style>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class=""><a href="{:url('admin/role/index')}">{:lang('Role')}</a></li>
+        <li class="active"><a href="#">{:lang('Create')}</a></li>
+        <li class="pull-right"><a href="javascript:history.back(-1);" class="text-muted"><i class="fa fa-chevron-circle-left"></i></a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <form role="form" id="operate" class="layui-form">
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Name')}<span class="lauyi-margin-left text-red">*</span></lable>
+                    <div class="layui-input-inline">
+                        <input type="text" name="role_name" autocomplete="off" placeholder="请输入名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Language variable')}<span class="lauyi-margin-left text-red">*</span></lable>
+                    <div class="layui-input-inline">
+                        <input type="text" name="lang_var" autocomplete="off" placeholder="请输入语言变量" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Sort')}</lable>
+                    <div class="layui-input-inline">
+                        <input type="text" name="sort" autocomplete="off" placeholder="请输入排序" class="layui-input" value="0">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="operate();">{:lang('Submit')}</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">{:lang('Reset')}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</div>
+{/block}
+
+<!-- 自定义js -->
+{block name="js"}
+<script type="text/javascript">
+    //----------------------------------------------------------------
+    //提交表单
+    //----------------------------------------------------------------
+    function operate() {
+        $.ajax({
+            url: "{:url('admin/role/create')}",
+            data: $("#operate").serialize(),
+            type: 'post',
+            dataType: 'json',
+            success: function (xhr) {
+                if (xhr.code == 200) {
+                    //第三方扩展皮肤
+                    layer.open({
+                        icon: 1,
+                        content: xhr.msg,
+                        skin: 'layer-ext-moon', //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                        yes: function (index, layero) {
+                            //do something
+                            window.location.href = "{:url('admin/role/index')}";
+                        }
+                    });
+                } else {
+                    layer.alert('error', {
+                        icon: 2,
+                        content: xhr.msg,
+                        skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                    })
+                }
+            }
+        });
+    }
+</script>
+{/block}

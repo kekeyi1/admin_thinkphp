@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{:lang('Login')}-{:lang('Company name')}-{:lang('Company slogan')}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="__STATIC__/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="__STATIC__/font-awesome/css/font-awesome.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="__STATIC__/admin/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+
+    <link rel="stylesheet" href="__STATIC__/admin/dist/css/login.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="__STATIC__/admin/dist/js/html5shiv.min.js"></script>
+    <script src="__STATIC__/admin/dist/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="login_box">
+    <div class="login_l_img"><img src="__STATIC__/admin/dist/img/login-img.png" /></div>
+    <div class="login">
+        <div class="login_logo"><a href="#"><img src="__STATIC__/admin/dist/img/login_logo2.png" /></a></div>
+        <div class="login_name">
+            <p>***后台管理系统</p>
+        </div>
+        <form method="post">
+            <input name="username" id="username" type="text"  value="用户名" onfocus="this.value=''" onblur="if(this.value==''){this.value='用户名'}">
+            <span id="password_text" onclick="this.style.display='none';document.getElementById('password').style.display='block';" >密码
+			</span>
+            <input name="password" type="password" id="password" style="display:none;" onblur="if(this.value==''){document.getElementById('password_text').style.display='block';this.style.display='none'};"/>
+            <input value="{:lang('Login')}" style="width:100%;" type="button" onclick="login();">
+            <!--            <button type="button" onclick="login();" class="btn btn-primary btn-block btn-flat">-->
+            <!--                {:lang('Login')}-->
+            <!--            </button>-->
+        </form>
+    </div>
+    <div class="copyright">
+        ***有限公司 版权所有©2019-<?php echo date('Y');?>
+        <br>
+        <a href="http://www.beian.miit.gov.cn" target="_blank" style="color:#ffffff">苏ICP备20001818号-1</a></p>
+    </div>
+</div>
+<div style="text-align:center;">
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 3 -->
+<script src="__STATIC__/jquery/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="__STATIC__/bootstrap/js/bootstrap.min.js"></script>
+<!-- Sweetalert 2.1.0 -->
+<script src="__STATIC__/sweetalert/promise.min.js"></script>
+<script src="__STATIC__/sweetalert/sweetalert.min.js"></script>
+<script src="__STATIC__/layer/layer.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // 回车键登录
+        document.onkeydown = function (event) {
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            if (e && e.keyCode == 13) {
+                login();
+            }
+        };
+
+    });
+
+    // 登录
+    function login() {
+        $.ajax({
+            type: 'post',
+            url: "{:url('admin/passport/login')}",
+            data: {username: $("[name='username']").val(), password: $("[name='password']").val()},
+            success: function (r) {
+                if (r.code == 200) {
+                    //第三方扩展皮肤
+                    layer.msg(r.msg);
+                    //1秒后执行
+                    setTimeout(function () {
+                        window.location.href = "{:url('admin/index/index')}";
+                    }, 1000);
+                } else {
+                    layer.alert('error', {
+                        icon: 2,
+                        content: r.msg,
+                        skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                    })
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

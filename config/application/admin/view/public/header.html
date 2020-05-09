@@ -1,0 +1,60 @@
+<header class="main-header">
+    <style>
+        .user-body {
+            border-bottom: none !important;
+        }
+
+        .dropdown-menu {
+            width: 180px !important;
+        }
+
+        .block{
+            display: block;
+        }
+    </style>
+    <!-- Logo -->
+    <a href="{:url('admin/index/index')}" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>C</b>MS</span>
+        <!-- logo for regular state and mobile devices -->
+        <!--<span class="logo-lg"><b>KITE</b>CMS</span>-->
+        <span class="logo-lg"><span>天启拍服后台管理系统项目</span></span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="false">
+                        <i class="fa fa-fw fa-user"></i>{$username}<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- Menu Body -->
+                        <li class="user-body">
+                            <div class=" text-center">
+                                <a href="{:url('admin/user/userInfo', ['id' => $uid])}" class="block">{:lang('Profile')}</a>
+                            </div>
+                        </li>
+                        <li class="user-body">
+                            <div class=" text-center">
+                                <a href="{:url('admin/user/editPassport', ['id' => $uid])}" class="block">{:lang('Password')}</a>
+                            </div>
+                        </li>
+                        <li class="user-body">
+                            <div class=" text-center">
+                                <a href="{:url('admin/passport/logout')}" class="block">{:lang('Logout')}</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

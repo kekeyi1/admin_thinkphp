@@ -1,0 +1,91 @@
+<!-- 模板继承 -->
+{extend name="public:base" /}
+
+<!-- 页面标题 -->
+{block name="title"}Administrator{/block}
+
+<!-- 自定义css -->
+{block name="css"}{/block}
+
+<!-- 内容区域 -->
+{block name="content"}
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">{:lang('Team')}</a></li>
+        <li class=""><a href="{:url('admin/team/create')}">{:lang('Create')}</a></li>
+    </ul>
+
+    <div class="box box-solid">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <form action="{:url('admin/team/index')}" method="get" class="form-inline">
+                <div class="form-group">
+                    <input type="text" name="q" value="{$search.q}" class="form-control" placeholder="" autocomplete="off">
+                </div>
+                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i> {:lang('Search')}
+                </button>
+            </form>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane active table-responsive no-padding">
+            <table class="table table-condensed table-hover layui-table center-align">
+                <thead>
+                <tr>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Serial number')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Name')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs2">{:lang('District')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Court')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Manager')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Leader')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Out job')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('In job')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Status')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Action')}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo" key="key"}
+                <tr>
+                    <td class="layui-text-align layui-padding">{$key + $current_num}</td>
+                    <td class="layui-text-align layui-padding">{$vo.name}</td>
+                    <td class="layui-text-align layui-padding">{$vo.province_name}{$vo.city_name}{$vo.area_name}</td>
+                    <td class="layui-text-align layui-padding">{$vo.agency_name}</td>
+                    <td class="layui-text-align layui-padding">{$vo.manager}</td>
+                    <td class="layui-text-align layui-padding">{$vo.leader}</td>
+                    <td class="layui-text-align layui-padding">{$vo.out_job}</td>
+                    <td class="layui-text-align layui-padding">{$vo.in_job}</td>
+                    <td class="layui-text-align layui-padding">
+                        {switch vo.isvalid}
+                        {case 0}
+                        <small class="label bg-red">{:lang('Disabled')}</small>
+                        {/case}
+                        {case 1}
+                        <small class="label bg-light-blue ">{:lang('Valid')}</small>
+                        {/case}
+                        {default /}
+                        {/switch}
+                    </td>
+                    <td class="layui-text-align layui-padding">
+                        <a href="{:url('admin/team/manage', ['id' => $vo['id']])}" class="layui-btn layui-btn-xs">{:lang('Manage')}</a>      
+                    </td>
+                </tr>
+                {/volist}
+                {empty name="list"}
+                    <tr>
+                        <td colspan="10" class="text-center">{:lang("No record")}</td>
+                    </tr>
+                {/empty}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
+    <div class="box-footer" class="right-align" style="text-align: right">
+        {$list->render()}
+    </div>
+</div>
+{/block}

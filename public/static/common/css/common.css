@@ -1,0 +1,39 @@
+/*
+法拍项目公共css
+全局文件引用
+*/
+.layui-text-align{
+    text-align: center!important;
+}
+.layui-width{
+
+}
+.layui-height{
+    height: 35px;
+}
+.layui-padding{
+    padding: 10px 10px!important;
+}
+.layui-padding-left{
+    padding-left: 10px;
+}
+.layui-padding-right{
+    padding-right: 10px;
+}
+.layui-padding-top{
+    padding-top: 5px;
+}
+.layui-padding-bottom{
+    padding-bottom:  5px;
+}
+.lauyi-margin-left{
+    margin-left: 5px!important;
+}
+.layui-width{
+    width: 20% !important;
+}
+
+
+
+
+

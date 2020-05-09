@@ -1,0 +1,110 @@
+<!-- 模板继承 -->
+{extend name="public:base" /}
+
+<!-- 页面标题 -->
+{block name="title"}Administrator{/block}
+
+<!-- 自定义css -->
+{block name="css"}{/block}
+<!-- 内容区域 -->
+{block name="content"}
+<style>
+    .layui-form-label {
+        width: 110px !important;
+    }
+</style>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class=""><a href="{:url('admin/dept/index', ['agency_id' => $agency_id])}">{:lang('Dept')}</a></li>
+        <li class="active"><a href="#">{:lang('Create')}</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <form role="form" id="operate" class="layui-form">
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Parent')}<span class="lauyi-margin-left text-red">*</span>
+                    </lable>
+                    <div class="layui-input-inline">
+                        <select name="pid" class="form-control input-sm" id="pid">
+                            <option value="0">{:lang('Root')}</option>
+                            {volist name="list" id="vo"}
+                            <option value="{$vo.id}">{eq name="vo.pid" value="0"} <{$vo.dept_name}>{else/}{$vo.html}
+                                {$vo.dept_name}{/eq}
+                            </option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <lable class="layui-form-label">{:lang('Dept name')}<span
+                            class="lauyi-margin-left text-red">*</span></lable>
+                    <div class="layui-input-inline">
+                        <input type="text" name="dept_name" autocomplete="off" placeholder="请输入部门名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('Status')}<span
+                            class="lauyi-margin-left text-red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="isvalid" value="1" title="{:lang('Valid')}" checked="">
+                        <input type="radio" name="isvalid" title="{:lang('Disabled')}" value="0">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="operate();">
+                            {:lang('Submit')}
+                        </button>
+                        <input type="hidden" name="agency_id" value="{$agency_id}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</div>
+{/block}
+
+<!-- 自定义js -->
+{block name="js"}
+<script type="text/javascript">
+    //-------------------------------------
+    //LAYUI默认配置
+    //-------------------------------------
+    layui.use(['laytpl', 'form'], function () {
+        var form = layui.form;
+    });
+
+    //----------------------------------------------------------------
+    //提交表单
+    //----------------------------------------------------------------
+    function operate() {
+        $.ajax({
+            url: "{:url('admin/dept/create')}",
+            data: $("#operate").serialize(),
+            type: 'post',
+            dataType: 'json',
+            success: function (xhr) {
+                if (xhr.code == 200) {
+                    //第三方扩展皮肤
+                    layer.open({
+                        icon: 1,
+                        content: xhr.msg,
+                        skin: 'layer-ext-moon', //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                        yes: function (index, layero) {
+                            //do something
+                            window.location.href = "{:url('admin/dept/index',array('agency_id'=>$agency_id))}";
+                        }
+                    });
+                } else {
+                    layer.alert('error', {
+                        icon: 2,
+                        content: xhr.msg,
+                        skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+                    })
+                }
+            }
+        });
+    }
+</script>
+{/block}

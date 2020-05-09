@@ -1,0 +1,157 @@
+<!-- 模板继承 -->
+{extend name="public:base" /}
+
+<!-- 自定义css -->
+{block name="css"}
+<link rel="stylesheet" href="__STATIC__/layui-formSelects-master/formSelects-v4.css">
+<style>
+    .layui-form-label {
+        width: 110px !important;
+    }
+
+    .xm-select-title{
+        height: unset!important;
+    }
+
+    .border{
+        border: none;
+    }
+
+    .background-color {
+        background-color: #F5F7FA;
+    }
+
+    .layui-form-select input{
+        color: #333!important;
+    }
+
+    .color{
+        color: #333;
+    }
+
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+        padding: 10px;
+    }
+</style>
+{/block}
+
+<!-- 内容区域 -->
+{block name="content"}
+<div class="nav-tabs-custom">
+    <div class="box-body no-padding">
+        <table class="table ">
+            <tbody>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('User name')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">{$info.username}</td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('Role')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    <div class="layui-form-item layui-form" style="margin-bottom: 0px">
+                        {volist name="list" id ='vo' key="key"}
+                        {in name="$vo.role_id" value="$info.role_ids"}
+                        <input type="checkbox" name="role[{$key}]" title="{$vo.role_name}" checked="">
+                        {/in}
+                        {/volist}
+                    </div>
+
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Agency')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {volist name="agency" id="v"}
+                        {eq name="v.id" value="$info.agency_id" }{$v.name}{/eq}
+                    {/volist}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Dept')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {volist name="dept_list" id ="vo"}
+                     {if condition="$info.dept_id == $vo.id" }|-{$vo.html} {$vo.dept_name}{/if}
+                    {/volist}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('Position')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {volist name="position" id="vo"}
+                    {if condition="$info.position_id == $vo.id" }{$vo.name}{/if}
+                    {/volist}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('The name')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {$info.true_name}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Phone')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {$info.phone}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('email')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {$info.email}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
+
+<!-- 自定义js -->
+{block name="js"}
+<script src="__STATIC__/layui/lay/modules/laytpl.js"></script>
+<script type="text/javascript" src="__STATIC__/layui-formSelects-master/formSelects-v4.js"></script>
+<script type="text/javascript">
+    //-------------------------------------
+    //LAYUI默认配置
+    //-------------------------------------
+    layui.use('form', function () {
+        var form = layui.form;
+        var laytpl = layui.laytpl;
+        form.on('select(test)', function (data) {
+            $.ajax({
+                url: "{:url('admin/dept/getDeptList')}",
+                data: {'id': data.value},
+                type: 'post',
+                dataType: 'json',
+                success: function (xhr) {
+                    if (xhr.code == 200) {
+                        var data = { //数据
+                            "list": xhr.data
+                        };
+                        var getTpl = dept.innerHTML, view = document.getElementById('view');
+                        laytpl(getTpl).render(data, function (html) {
+                            view.innerHTML = html;
+                            form.render();
+                        });
+
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script id="dept" type="text/html">
+    <option value="">请选择部门</option>
+    {{#  layui.each(d.list, function(index, item){ }}
+    <option value="{{item.id }}">|-{{ item.html }} {{ item.dept_name }}</option>
+    {{#  }); }}
+</script>
+{/block}

@@ -1,0 +1,172 @@
+<!-- 模板继承 -->
+{extend name="public:base" /}
+<!-- 自定义css -->
+{block name="css"}
+<link rel="stylesheet" href="__STATIC__/layui-formSelects-master/formSelects-v4.css">
+<style>
+    .layui-form-label {
+        width: 110px !important;
+    }
+
+    .width{
+        width: 400px!important;
+    }
+
+    .background-color {
+        background-color: #F5F7FA;
+    }
+
+    .border{
+        border: none;
+    }
+
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+        padding: 10px;
+    }
+</style>
+{/block}
+<!-- 内容区域 -->
+{block name="content"}
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class=""><a href="{:url('admin/customer/index')}">{:lang('Customer this')}</a></li>
+        <li class="active"><a href="#">{:lang('Customer detail')}</a></li>
+        <li class="pull-right"><a href="javascript:history.back(-1);" class="text-muted"><i
+                class="fa fa-chevron-circle-left"></i></a></li>
+    </ul>
+
+
+    <div class="box-body no-padding">
+        <table class="table ">
+            <tbody>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('Customer name')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">{$info.name}</td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('Customer phone')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">{$info.phone}</td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Customer sex')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">{$info.phone}</td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Customer birthday')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">{$info.birthday}</td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('Customer address')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">{$info.address}</td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span
+                        style="float: right">{:lang('Customer state')}&nbsp;<b>:</b></span></td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {foreach name = 'state' id = 'vo' key='k'}
+                    {if condition="$info.state ==$k"}
+                    {$vo}
+                    {/if}
+                    {/foreach}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Customer referees')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {foreach name = 'user' id = 'vo' key='k'}
+                    {if condition="$info.referees ==$vo.id"}
+                    {$vo.name}
+                    {/if}
+                    {/foreach}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Customer sm')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    <div id="demo1" class="width border"></div>
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Customer intention product')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">
+                    {foreach name = 'product' id = 'vo' key='k'}
+                    {if condition="$info.intention_product ==$k"}
+                    {$vo}
+                    {/if}
+                    {/foreach}
+                </td>
+            </tr>
+            <tr class="layui-row">
+                <td class="layui-col-xs2 layui-col-md2"><span style="float: right">{:lang('Customer intention detail')}&nbsp;<b>:</b></span>
+                </td>
+                <td class="layui-col-xs10 layui-col-md10">{$info.intention_detail}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
+
+<!-- 自定义js -->
+{block name="js"}
+<!--第一步：编写模版。你可以使用一个script标签存放模板，如：-->
+<script type="text/javascript" src="__STATIC__/layui-formSelects-master/formSelects-v4.js"></script>
+<!--<script src="__STATIC__/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>-->
+<script type="text/javascript" src="__STATIC__/xm-select/xm-select.js" charset="utf-8"></script>
+<script type="text/javascript" src="__STATIC__/xm-select/axios.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var demo1 = xmSelect.render({
+        el: '#demo1',
+        autoRow: true,
+        disabled:true,
+        toolbar: { show: true },
+        filterable: true,
+        remoteSearch: true,
+        remoteMethod: function(val, cb, show){
+            //这里如果val为空, 则不触发搜索
+            if(!val){
+                return cb([]);
+            }
+            //这里引入了一个第三方插件axios, 相当于$.ajax
+            axios({
+                method: 'get',
+                data: {keyword: val},
+                // url: 'https://www.fastmock.site/mock/98228b1f16b7e5112d6c0c87921eabc1/xmSelect/search?name='+val,
+                url: "{:url('admin/common/getSmList')}",
+                params: {
+                    keyword: val,
+                }
+            }).then(response => {
+                var res = response.data;
+                cb(res.data)
+            }).catch(err => {
+                cb([]);
+            });
+        },
+    });
+    // demo1.setValue([{ name: '动态值', value: 999 }]);
+    demo1.setValue({$sm});
+
+    //----------------------------------------------------------------
+    //LAYUI默认配置
+    //----------------------------------------------------------------
+    layui.use(['laytpl', 'form', 'laydate'], function () {
+        var form = layui.form
+            ,laytpl = layui.laytpl
+            ,laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#date'
+            ,max: "{:date('Y-m-d')}"
+        });
+    });
+</script>
+{/block}

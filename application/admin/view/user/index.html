@@ -1,0 +1,109 @@
+<!-- 模板继承 -->
+{extend name="public:base" /}
+
+<!-- 自定义css -->
+{block name="css"}{/block}
+
+<!-- 内容区域 -->
+{block name="content"}
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">{:lang('User')}</a></li>
+        <li class=""><a href="{:url('admin/user/create')}">{:lang('Create')}</a></li>
+    </ul>
+
+    <div class="box box-solid">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <form action="{:url('admin/user/index')}" method="get" class="form-inline">
+                <div class="form-group">
+                    <input type="text" name="q" value="{$search.q}" class="form-control" placeholder="">
+                </div>
+                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i> {:lang('Search')}
+                </button>
+            </form>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane active table-responsive no-padding">
+            <table class="table table-condensed table-hover layui-table center-align">
+                <thead>
+                <tr>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Serial number')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('User name')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs2">{:lang('Role')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs2">{:lang('Agency')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Dept')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('The name')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Phone')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs1">{:lang('Email')}</th>
+                    <th class="layui-text-align layui-padding">{:lang('Status')}</th>
+                    <th class="layui-text-align layui-padding layui-col-xs2">{:lang('Action')}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo" key="key"}
+                <tr id="tr_{$vo.uid}">
+                    </td>
+                    <td class="layui-text-align layui-padding">{$key + $current_num}</td>
+                    <td class="layui-text-align layui-padding">{$vo.username}</td>
+                    <td class="layui-text-align layui-padding">
+                        {volist name="vo.role" id="r"}
+                        <{$r.role_name}>
+                        {/volist}
+                    </td>
+                    <td class="layui-text-align layui-padding">{$vo.agency_name}</td>
+                    <td class="layui-text-align layui-padding">{$vo.dept_name}</td>
+                    <td class="layui-text-align layui-padding">{$vo.true_name}</td>
+                    <td class="layui-text-align layui-padding">{$vo.phone}</td>
+                    <td class="layui-text-align layui-padding">{$vo.email}</td>
+                    <td class="layui-text-align layui-padding">
+                        {switch vo.status}
+                        {case 0}
+                        <a onclick="state('{$vo.uid}');" href="#" class="label bg-light-blue ">{:lang('Valid')}</a>
+                        {/case}
+                        {case 1}
+                        <a onclick="state('{$vo.uid}');" href="#" class="label bg-red">{:lang('Disabled')}</a>
+                        {/case}
+                        {default /}
+                        {/switch}
+                    </td>
+                    <td class="layui-text-align layui-padding">
+                        <a href="{:url('admin/user/edit', ['id' => $vo['uid']])}" class="layui-btn layui-btn-xs"></i>
+                            {:lang('Edit')}</a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+    <div class="box-footer" class="right-align" style="text-align: right">
+        {$page}
+    </div>
+</div>
+{/block}
+
+<!-- 自定义js -->
+{block name="js"}
+<script type="text/javascript">
+    function state(id) {
+        $.ajax({
+            url: "{:url('admin/user/state')}",
+            data: {id : id},
+            type: 'post',
+            dataType: 'json',
+            success: function (xhr) {
+                console.log(xhr);
+                if (xhr.code == 200) {
+                    window.location.reload();
+                }
+            }
+        });
+         
+    }
+</script>
+{/block}
