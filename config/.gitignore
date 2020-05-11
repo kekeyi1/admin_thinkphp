@@ -1,9 +1,0 @@
-/.idea
-/.vscode
-*.log
-.env
-*.lock
-nbproject
-public/uploads
-config/database.php
-upload/
